@@ -1,8 +1,9 @@
 import numpy as np
+from Cost import CostFunction
 
 
 class Perceptron:
-    def __init__(self, X: np.ndarray, Y: np.ndarray, activation_function: callable, cost_function: object) -> None:
+    def __init__(self, X: np.ndarray, Y: np.ndarray, activation_function: callable, cost_function: CostFunction) -> None:
         """
         X: Matrix of features data
         Y: Vector of the attribute we want to predict
@@ -59,7 +60,7 @@ class Perceptron:
         arr = arr.reshape((len(arr), 1))
         return arr
 
-    def calculate_new_weights(self, W: np.ndarray, b: float, η: float, C) -> tuple[np.ndarray, float]:
+    def calculate_new_weights(self, W: np.ndarray, b: float, η: float, C: CostFunction) -> tuple[np.ndarray, float]:
         """
         Does a gradient descent on the convex cost function
         Returns new W and b

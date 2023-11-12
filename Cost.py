@@ -1,7 +1,7 @@
 import numpy as np
 
 
-class LogLoss:
+class CostFunction:
     def __init__(self, A: np.ndarray, Y: np.ndarray):
         """
         A: Vector of elements that went through the activation function
@@ -10,32 +10,42 @@ class LogLoss:
         assert A.shape == Y.shape, "A and Y matrixes must have the same size"
         self.A = A
         self.Y = Y
-
-
+    
     def value(self) -> float:
         """
         Returns the value of the error
         """
-        return -(1/len(self.Y)) * np.sum( [y * np.log(a) + (1-y) * np.log(1-a) for a,y in zip(self.A,self.Y)] )
 
     def derivative_weights(self, X) -> np.ndarray:
         """
         Returns ∂L/∂W
         """
         assert self.A.shape[0] == X.shape[0], "A and Z must have the same number of lines"
-        return (1/len(self.A)) * (X.T).dot(self.A - self.Y)
-
+    
     def derivative_bias(self) -> float:
         """
         Returns ∂L/∂b
         """
+
+class LogLoss(CostFunction):
+    def __init__(self, A: np.ndarray, Y: np.ndarray):
+        super().__init__(A, Y)
+
+    def value(self) -> float:
+        return -(1/len(self.Y)) * np.sum( [y * np.log(a) + (1-y) * np.log(1-a) for a,y in zip(self.A,self.Y)] )
+
+    def derivative_weights(self, X) -> np.ndarray:
+        super().derivative_weights(X)
+        return (1/len(self.A)) * (X.T).dot(self.A - self.Y)
+
+    def derivative_bias(self) -> float:
         return (1/len(self.A)) * np.sum(self.A - self.Y)
 
 
 
 class LeastSquare:
-    def __init__(self, A: np.ndarray, Y: np.ndarray) -> None:
-        pass
+    def __init__(self, A: np.ndarray, Y: np.ndarray):
+        super().__init__(A, Y)
 
     def value(self) -> float:
         pass
