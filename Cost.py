@@ -30,3 +30,18 @@ class LogLoss:
         Returns ∂L/∂b
         """
         return (1/len(self.A)) * np.sum(self.A - self.Y)
+
+
+
+class LeastSquare:
+    def __init__(self, A: np.ndarray, Y: np.ndarray) -> None:
+        pass
+
+    def value(self) -> float:
+        pass
+
+    def derivative_weights(self, X) -> np.ndarray:
+        pass
+
+    def derivative_bias(self) -> float:
+        pass
