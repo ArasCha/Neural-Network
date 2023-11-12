@@ -9,11 +9,17 @@ import matplotlib.pyplot as plt
 
 def display_dataset(X: list, Y: list):
     plt.scatter(X[:,0], X[:,1], c=Y)
-    plt.show()
 
-def display_errors(errors: list):
+def display_error_graph(errors: list):
     plt.plot(errors)
-    plt.show()
+
+def display_decision_frontier(W, b):
+
+    x1 = np.linspace(0, 5, 100)
+    x2 = ( -W[0] * x1 - b ) / W[1]
+
+    plt.plot(x1, x2, c="green", lw=3)
+
 
 
 if __name__ == "__main__":
@@ -26,7 +32,7 @@ if __name__ == "__main__":
 
     Y = Y.reshape((len(Y), 1)) # Making sure that the feature to predict is a vector (1 dimension)
 
-    # display_dataset(X, Y)
+    display_dataset(X, Y)
 
     perceptron = Perceptron(X, Y, sigmoid, LogLoss)
     perceptron.train(100, 0.1)
@@ -34,7 +40,12 @@ if __name__ == "__main__":
     plant = np.array([1, 4]).reshape((1, 2))
     print(perceptron.predict(plant))
 
-    display_errors(perceptron.errors)
+    print(perceptron.performance)
+
+    # display_error_graph(perceptron.errors)
+    display_decision_frontier(perceptron.W, perceptron.b)
+
+    plt.show()
 
 
     # see https://www.youtube.com/watch?v=5TpBe7KTAHE
