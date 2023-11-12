@@ -5,6 +5,10 @@ from ActivationFunction import sigmoid, tanh
 
 class Perceptron:
     def __init__(self, X: np.ndarray, Y: np.ndarray) -> None:
+        """
+        X: Matrix of features data
+        Y: Vector of the attribute we want to predict
+        """
         self.X = X
         self.Y = Y
 
@@ -15,13 +19,13 @@ class Perceptron:
         for i in range(epochs):
             
             print(f"Epoch {i} starts")
-            Z = self.calculate_Z(self.X, W, b)
+            Z = self.calculate_Z(W, b)
             A = self.calculate_A(Z, sigmoid)
 
             cost_value = self.calculate_cost(A, logloss)
             print(f"Value of error at epoch {i}:", cost_value)
-            
-            W, b = self.calculate_new_weights(self.X, self.Y, A, W, b, η)
+
+            W, b = self.calculate_new_weights(A, W, b, η)
 
     def init_weights(self) -> tuple[np.ndarray, float]:
         W = np.random.random_sample(size=self.X.shape[1])
@@ -29,16 +33,15 @@ class Perceptron:
         W = W.reshape(len(W), 1)
         return W, b
 
-    def calculate_Z(self, X: np.ndarray, W: np.ndarray, b: float) -> np.ndarray:
+    def calculate_Z(self, W: np.ndarray, b: float) -> np.ndarray:
         """
-        Returns the model, aka the matrix multiplication between X and W, plus b
+        Returns X·W+b , aka the model
 
-        X: Matrix of data of each feature
         W: Vector of weights
         b: bias
         """
-        assert X.shape[1] == W.shape[0], "Given number of features must be equal to number of weights"
-        arr = X.dot(W) + b
+        assert self.X.shape[1] == W.shape[0], "Given number of features must be equal to number of weights"
+        arr = self.X.dot(W) + b
         arr = arr.reshape(len(arr), 1)
         return arr
     
@@ -60,19 +63,17 @@ class Perceptron:
         """
         return f(A, self.Y)
 
-    def calculate_new_weights(self, X: np.ndarray, Y: np.ndarray, A: np.ndarray, W: np.ndarray, b: float, η: float) -> tuple[np.ndarray, float]:
+    def calculate_new_weights(self, A: np.ndarray, W: np.ndarray, b: float, η: float) -> tuple[np.ndarray, float]:
         """
         Does a gradient descent on the LogLoss function
 
-        X: Matrix of features data
-        Y: Vector of the attribute we want to predict
         A: Vector of elements that went through the activation function
         W: Vector of previous weights
         b: Previous bias
         η: Learning rate
         """
 
-        _W = W - η * logloss_derivative_weights(X, A, Y)
-        _b = b - η * logloss_derivative_bias(A, Y)
+        _W = W - η * logloss_derivative_weights(self.X, A, self.Y)
+        _b = b - η * logloss_derivative_bias(A, self.Y)
 
         return _W, _b
