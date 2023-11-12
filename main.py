@@ -1,5 +1,7 @@
 from sklearn.datasets import make_blobs
 from Perceptron import Perceptron
+from Cost import LogLoss
+from ActivationFunction import sigmoid
 
 
 
@@ -21,7 +23,7 @@ if __name__ == "__main__":
 
     # display_dataset(X, Y)
 
-    perceptron = Perceptron(X, Y)
+    perceptron = Perceptron(X, Y, sigmoid, LogLoss)
     perceptron.train(400, 4)
 
     # see https://www.youtube.com/watch?v=5TpBe7KTAHE

@@ -1,16 +1,18 @@
 import numpy as np
-from Cost import LogLoss
-from ActivationFunction import sigmoid, tanh
 
 
 class Perceptron:
-    def __init__(self, X: np.ndarray, Y: np.ndarray) -> None:
+    def __init__(self, X: np.ndarray, Y: np.ndarray, activation_function: callable, cost_function: object) -> None:
         """
         X: Matrix of features data
         Y: Vector of the attribute we want to predict
+        activation_function: function that will be applied on the model
+        cost_function: class that representents the cost function to use
         """
         self.X = X
         self.Y = Y
+        self.activation_function = activation_function
+        self.cost_function = cost_function
 
     def train(self, epochs: int, η: float = 0.05):
 
@@ -20,10 +22,10 @@ class Perceptron:
             
             print(f"Epoch {i} starts")
             Z = self.calculate_Z(W, b)
-            A = self.calculate_A(Z, sigmoid)
+            A = self.calculate_A(Z, self.activation_function)
 
-            L = LogLoss(A, self.Y)
-            cost_value = L.logloss()
+            L = self.cost_function(A, self.Y)
+            cost_value = L.value()
             print(f"Value of error at epoch {i}:", cost_value)
 
             W, b = self.calculate_new_weights(W, b, η, L)
