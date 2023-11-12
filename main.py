@@ -1,4 +1,5 @@
 from sklearn.datasets import make_blobs
+from Perceptron import Perceptron
 
 
 
@@ -19,5 +20,8 @@ if __name__ == "__main__":
     Y = Y.reshape((len(Y), 1)) # Making sure that the feature to predict is a vector (1 dimension)
 
     # display_dataset(X, Y)
+
+    perceptron = Perceptron(X, Y)
+    perceptron.train(400, 4)
 
     # see https://www.youtube.com/watch?v=5TpBe7KTAHE
