@@ -1,28 +1,25 @@
 import numpy as np
-from typing import Sequence
 
 
-Vector = Sequence[float]
-Matrix = Sequence[Vector]
 
-class Cost:
-    ...
+def logloss(A: np.ndarray, Y: np.ndarray) -> float:
+    """
+    Returns the value of the error
+    """
+    assert A.shape == Y.shape, "A and Y matrixes must have the same size"
+    return -(1/len(Y)) * np.sum( [y * np.log(a) + (1-y) * np.log(1-a) for a,y in zip(A,Y)] )
 
-
-def logloss(A: Vector, Y: Vector) -> float:
-    assert len(Y) == len(A)
-    return -(1/len(Y)) * np.sum( y * np.log10(a) + (1-y) * np.log10(1-a) for a,y in zip(A,Y))
-
-def logloss_derivative_weights(X: Matrix, A: Vector, Y: Vector) -> Vector:
+def logloss_derivative_weights(X: np.ndarray, A: np.ndarray, Y: np.ndarray) -> np.ndarray:
     """
     Returns ∂L/∂W
     """
-    assert len(A) == len(Y) == len(X)
-    return (1/len(A)) * np.dot(np.transpose(X), (A - Y))
+    assert A.shape == Y.shape, "A and Y matrixes must have the same size"
+    assert A.shape[0] == X.shape[0], "A and Z must have the same number of lines"
+    return (1/len(A)) * np.transpose(X).dot(A - Y)
 
-def logloss_derivative_bias(A: Vector, Y: Vector) -> float:
+def logloss_derivative_bias(A: np.ndarray, Y: np.ndarray) -> float:
     """
     Returns ∂L/∂b
     """
-    assert len(A) == len(Y)
+    assert A.shape == Y.shape, "A and Y matrixes must have the same size"
     return (1/len(A)) * np.sum(A - Y)
