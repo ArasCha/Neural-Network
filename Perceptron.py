@@ -73,11 +73,16 @@ class Perceptron:
 
         return W, b
 
-    def predict(self, X: np.ndarray) -> bool:
+    def predict(self, X: np.ndarray):
         """
         X: Sample of one row to predict
         """
-        assert X.shape[0] == 1, "Enter only one sample"
 
         A = self.model(X)
         return A >= 0.5 # should depend on the activation function used
+    
+    @property
+    def performance(self) -> float:
+        from sklearn.metrics import accuracy_score
+        Y_pred = self.predict(self.X)
+        return accuracy_score(self.Y, Y_pred)
