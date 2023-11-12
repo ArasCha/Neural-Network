@@ -1,5 +1,5 @@
 import numpy as np
-from Cost import logloss, logloss_derivative_bias, logloss_derivative_weights
+from Cost import LogLoss
 from ActivationFunction import sigmoid, tanh
 
 
@@ -22,10 +22,11 @@ class Perceptron:
             Z = self.calculate_Z(W, b)
             A = self.calculate_A(Z, sigmoid)
 
-            cost_value = self.calculate_cost(A, logloss)
+            L = LogLoss(A, self.Y)
+            cost_value = L.logloss()
             print(f"Value of error at epoch {i}:", cost_value)
 
-            W, b = self.calculate_new_weights(A, W, b, η)
+            W, b = self.calculate_new_weights(W, b, η, L)
 
     def init_weights(self) -> tuple[np.ndarray, float]:
         W = np.random.random_sample(size=self.X.shape[1])
@@ -55,25 +56,20 @@ class Perceptron:
         arr = np.array(list(map(f, Z)))
         arr = arr.reshape((len(arr), 1))
         return arr
-    
-    def calculate_cost(self, A: np.ndarray, f: callable) -> float:
-        """
-        A: Vector of elements that went through the activation function
-        f: Cost function
-        """
-        return f(A, self.Y)
 
-    def calculate_new_weights(self, A: np.ndarray, W: np.ndarray, b: float, η: float) -> tuple[np.ndarray, float]:
+    def calculate_new_weights(self, W: np.ndarray, b: float, η: float, C) -> tuple[np.ndarray, float]:
         """
-        Does a gradient descent on the LogLoss function
+        Does a gradient descent on the convex cost function
+        Returns new W and b
 
         A: Vector of elements that went through the activation function
         W: Vector of previous weights
         b: Previous bias
         η: Learning rate
+        C: Instance of class of a convex function
         """
 
-        _W = W - η * logloss_derivative_weights(self.X, A, self.Y)
-        _b = b - η * logloss_derivative_bias(A, self.Y)
+        _W = W - η * C.derivative_weights(self.X)
+        _b = b - η * C.derivative_bias()
 
         return _W, _b
