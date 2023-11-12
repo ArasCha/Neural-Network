@@ -12,7 +12,7 @@ class LogLoss:
         self.Y = Y
 
 
-    def logloss(self) -> float:
+    def value(self) -> float:
         """
         Returns the value of the error
         """
