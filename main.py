@@ -2,6 +2,7 @@ from sklearn.datasets import make_blobs
 from Perceptron import Perceptron
 from Cost import LogLoss
 from ActivationFunction import sigmoid
+import numpy as np
 
 
 
@@ -21,9 +22,12 @@ if __name__ == "__main__":
 
     Y = Y.reshape((len(Y), 1)) # Making sure that the feature to predict is a vector (1 dimension)
 
-    # display_dataset(X, Y)
+    display_dataset(X, Y)
 
     perceptron = Perceptron(X, Y, sigmoid, LogLoss)
-    perceptron.train(400, 4)
+    perceptron.train(100, 4)
+
+    plant = np.array([1, 4]).reshape((1, 2))
+    print(perceptron.predict(plant))
 
     # see https://www.youtube.com/watch?v=5TpBe7KTAHE

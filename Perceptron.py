@@ -14,22 +14,21 @@ class Perceptron:
         self.Y = Y
         self.activation_function = activation_function
         self.cost_function = cost_function
+        self.W, self.b = self.init_weights()
 
     def train(self, epochs: int, η: float = 0.05):
-
-        W, b = self.init_weights()
 
         for i in range(epochs):
             
             print(f"Epoch {i} starts")
-            Z = self.calculate_Z(W, b)
-            A = self.calculate_A(Z, self.activation_function)
+            
+            A = self.model()
 
             L = self.cost_function(A, self.Y)
             cost_value = L.value()
             print(f"Value of error at epoch {i}:", cost_value)
 
-            W, b = self.calculate_new_weights(W, b, η, L)
+            self.W, self.b = self.calculate_new_weights(η, L)
 
     def init_weights(self) -> tuple[np.ndarray, float]:
         W = np.random.random_sample(size=self.X.shape[1])
@@ -37,42 +36,48 @@ class Perceptron:
         W = W.reshape(len(W), 1)
         return W, b
 
-    def calculate_Z(self, W: np.ndarray, b: float) -> np.ndarray:
+    def calculate_Z(self, X: np.ndarray = None) -> np.ndarray:
         """
-        Returns X·W+b , aka the model
+        Returns X·W+b
+        """
+        if X is None: X = self.X # in case we use it to get a prediction
 
-        W: Vector of weights
-        b: bias
-        """
-        assert self.X.shape[1] == W.shape[0], "Given number of features must be equal to number of weights"
-        arr = self.X.dot(W) + b
+        assert X.shape[1] == self.W.shape[0], "Given number of features must be equal to number of weights"
+        arr = X.dot(self.W) + self.b
         arr = arr.reshape(len(arr), 1)
         return arr
     
-    def calculate_A(self, Z: np.ndarray, f: callable) -> np.ndarray:
+    def model(self, X: np.ndarray = None) -> np.ndarray:
         """
-        Returns a vector of each element of a vector Z applied to the activation function f
+        Returns a vector of each element of a vector Z applied to the activation function f, aka the model
+        X: Sample
+        """
 
-        Z: Vector of matrix multiplications between X (features data) and W (weights)
-        f: Activation function
-        """
-        arr = np.array(list(map(f, Z)))
+        Z = self.calculate_Z(X)
+        arr = np.array(list(map(self.activation_function, Z)))
         arr = arr.reshape((len(arr), 1))
         return arr
 
-    def calculate_new_weights(self, W: np.ndarray, b: float, η: float, C: CostFunction) -> tuple[np.ndarray, float]:
+    def calculate_new_weights(self, η: float, C: CostFunction) -> tuple[np.ndarray, float]:
         """
         Does a gradient descent on the convex cost function
         Returns new W and b
 
         A: Vector of elements that went through the activation function
-        W: Vector of previous weights
-        b: Previous bias
         η: Learning rate
         C: Instance of class of a convex function
         """
 
-        _W = W - η * C.derivative_weights(self.X)
-        _b = b - η * C.derivative_bias()
+        W = self.W - η * C.derivative_weights(self.X)
+        b = self.b - η * C.derivative_bias()
 
-        return _W, _b
+        return W, b
+
+    def predict(self, X: np.ndarray) -> bool:
+        """
+        X: Sample of one row to predict
+        """
+        assert X.shape[0] == 1, "Enter only one sample"
+
+        A = self.model(X)
+        return A >= 0.5 # should depend on the activation function used
