@@ -15,6 +15,7 @@ class Perceptron:
         self.activation_function = activation_function
         self.cost_function = cost_function
         self.W, self.b = self.init_weights()
+        self.errors = []
 
     def train(self, epochs: int, η: float = 0.05):
 
@@ -25,8 +26,7 @@ class Perceptron:
             A = self.model()
 
             L = self.cost_function(A, self.Y)
-            cost_value = L.value()
-            print(f"Value of error at epoch {i}:", cost_value)
+            self.errors.append(L.value())
 
             self.W, self.b = self.calculate_new_weights(η, L)
 
