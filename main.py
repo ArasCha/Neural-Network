@@ -1,4 +1,3 @@
-from sklearn.datasets import make_blobs
 from Perceptron import Perceptron
 from Cost import LogLoss
 from ActivationFunction import sigmoid
@@ -13,13 +12,14 @@ if __name__ == "__main__":
 
     X_train, y_train, X_test, y_test = load_data()
     """
-    X: features. n_features = 2 so X has 2 columns
-    Y: 1 if the plant is toxic, 0 if not. Feature we try to predict
+    X_train: images we'll use to train the model. 3d matrix (tensor)
+    y_train: 0 if cat, 1 if dog
     """
 
     print(X_train.shape) # 1000 images of 64x64 px
-    print(y_train.shape) # 0 if cat, 1 if dog
-
+    print(y_train.shape) # 1000x1
+    print(np.unique(y_train, return_counts=True)) # 500 cats, 500 dogs, so balanced dataset
+    print(X_train)
     # display_dataset(X, Y)
 
     # perceptron = Perceptron(X, Y, sigmoid, LogLoss)
