@@ -7,7 +7,8 @@ def display_dataset(X: list, Y: list):
     plt.scatter(X[:,0], X[:,1], c=Y)
 
 def display_error_graph(errors: list):
-    plt.plot(errors)
+	plt.plot(errors)
+	plt.show()
 
 def display_decision_frontier(W, b):
 
@@ -31,16 +32,45 @@ def load_data():
 
 def show_images(X: np.ndarray, Y: np.ndarray, nb=10):
 	"""
-	X: images
-	Y: results
+	X: set of images or single image
+	Y: values for each image or value of image
 	nb: Number of images to show
 	"""
 	
 	plt.figure(figsize=(16, 8))
-	for i in range(1, nb):
+
+	def plot_image(img, value, i=1):
 		plt.subplot(4, 5, i)
-		plt.imshow(X[i], cmap='gray')
-		plt.title(Y[i])
+		plt.imshow(img, cmap='gray')
+		plt.title(value)
 		plt.tight_layout()
+
+	if X.ndim == 3:
+		for i in range(1, nb+1):
+			plot_image(X[i], Y[i], i)
+
+	elif X.ndim == 2:
+		plot_image(X, Y)
 	
+	else: Exception("Enter an image or a set of images (dimension wasn't 2 or 3)")
+
 	plt.show()
+
+
+def normalize_images(X_images: np.ndarray) -> np.ndarray:
+	"""
+	X_images: set of images or single image
+	Returns the image(s) flatten and normalized (from range 255 to 1)
+	"""
+	
+	if X_images.ndim == 3: # it's a list of images
+		X_flattened = np.array([X_images[i].flatten() for i in range(len(X_images))]) # flattening the 2nd and 3nd dimensions together
+	
+	elif X_images.ndim == 2: # it's a single images
+		X_flattened = X_images.flatten()
+		X_flattened = X_flattened.reshape(1, len(X_flattened))
+
+	else:
+		raise Exception("Enter an image or a set of images (dimension wasn't 2 or 3)")
+	
+	return X_flattened.astype(np.float64) / 255
