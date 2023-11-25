@@ -35,7 +35,7 @@ if __name__ == "__main__":
     display_dataset(X, Y)
 
     perceptron = Perceptron(X, Y, sigmoid, LogLoss)
-    perceptron.train(100, 0.1)
+    perceptron.train(500, 0.9)
 
     plant = np.array([1, 4]).reshape((1, 2))
     print(perceptron.predict(plant))
