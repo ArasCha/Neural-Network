@@ -1,8 +1,6 @@
 from Perceptron import Perceptron
 from Cost import LogLoss
 from ActivationFunction import sigmoid
-import numpy as np
-import matplotlib.pyplot as plt
 from utils import *
 
 
@@ -10,27 +8,23 @@ from utils import *
 
 if __name__ == "__main__":
 
-    X_train, y_train, X_test, y_test = load_data()
+    X_images, Y, X_test, y_test = load_data()
     """
-    X_train: images we'll use to train the model. 3d matrix (tensor)
+    X_train: images we'll use to train the model. 3d matrix (tensor). images of 64x64px
     y_train: 0 if cat, 1 if dog
     """
 
-    print(X_train.shape) # 1000 images of 64x64 px
-    print(y_train.shape) # 1000x1
-    print(np.unique(y_train, return_counts=True)) # 500 cats, 500 dogs, so balanced dataset
-    show_images(X_train, y_train)
-    # display_dataset(X, Y)
+    X = normalize_images(X_images)
 
-    # perceptron = Perceptron(X, Y, sigmoid, LogLoss)
-    # perceptron.train(500, 0.9)
+    perceptron = Perceptron(X, Y, sigmoid, LogLoss)
+    perceptron.train(100, 2)
+    
+    print(perceptron.performance)
 
-    # plant = np.array([1, 4]).reshape((1, 2))
-    # print(perceptron.predict(plant))
-
-    # print(perceptron.performance)
-
-    # # display_error_graph(perceptron.errors)
-    # display_decision_frontier(perceptron.W, perceptron.b)
-
-    # plt.show()
+    image, value = X_test[2], y_test[2]
+    show_images(image, value) # show the image we chose
+    image_n = normalize_images(image)
+    print(perceptron.predict(image_n)) # False: cat, True: dog
+    
+    # print(perceptron.errors) # nan problem
+    # display_error_graph(perceptron.errors)
