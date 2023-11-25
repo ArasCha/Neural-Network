@@ -19,7 +19,7 @@ if __name__ == "__main__":
     print(X_train.shape) # 1000 images of 64x64 px
     print(y_train.shape) # 1000x1
     print(np.unique(y_train, return_counts=True)) # 500 cats, 500 dogs, so balanced dataset
-    print(X_train)
+    show_images(X_train, y_train)
     # display_dataset(X, Y)
 
     # perceptron = Perceptron(X, Y, sigmoid, LogLoss)

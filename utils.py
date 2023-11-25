@@ -27,3 +27,20 @@ def load_data():
     y_test = np.array(test_dataset["Y_test"][:]) # your train set labels
     
     return X_train, y_train, X_test, y_test
+
+
+def show_images(X: np.ndarray, Y: np.ndarray, nb=10):
+	"""
+	X: images
+	Y: results
+	nb: Number of images to show
+	"""
+	
+	plt.figure(figsize=(16, 8))
+	for i in range(1, nb):
+		plt.subplot(4, 5, i)
+		plt.imshow(X[i], cmap='gray')
+		plt.title(Y[i])
+		plt.tight_layout()
+	
+	plt.show()
