@@ -21,8 +21,6 @@ class Perceptron:
 
         for i in range(epochs):
             
-            print(f"Epoch {i} starts")
-            
             A = self.model()
 
             L = self.cost_function(A, self.Y)
