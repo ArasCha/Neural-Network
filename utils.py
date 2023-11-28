@@ -64,7 +64,7 @@ def normalize_images(X_images: np.ndarray) -> np.ndarray:
 	"""
 	
 	if X_images.ndim == 3: # it's a list of images
-		X_flattened = np.array([X_images[i].flatten() for i in range(len(X_images))]) # flattening the 2nd and 3nd dimensions together
+		X_flattened = X_images.reshape(X_images.shape[0], X_images.shape[1] * X_images.shape[2]) # flattening the 2nd and 3nd dimensions together
 	
 	elif X_images.ndim == 2: # it's a single images
 		X_flattened = X_images.flatten()
