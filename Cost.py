@@ -32,7 +32,8 @@ class LogLoss(CostFunction):
         super().__init__(A, Y)
 
     def value(self) -> float:
-        return -(1/len(self.Y)) * np.sum( [y * np.log(a) + (1-y) * np.log(1-a) for a,y in zip(self.A,self.Y)] )
+        ε = 1e-15
+        return -(1/len(self.Y)) * np.sum( self.Y * np.log(self.A + ε) + (1 - self.Y) * np.log(1 - self.A + ε) )
 
     def derivative_weights(self, X) -> np.ndarray:
         super().derivative_weights(X)
