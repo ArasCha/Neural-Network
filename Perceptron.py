@@ -41,8 +41,8 @@ class Perceptron:
         return errors, accuracies, errors_test, accuracies_test
 
     def init_weights(self) -> tuple[np.ndarray, float]:
-        W = np.random.random_sample(size=self.X.shape[1])
-        b = np.random.random_sample()
+        W = np.random.randn(self.X.shape[1], 1)
+        b = np.random.randn(1)
         W = W.reshape(len(W), 1)
         return W, b
 
