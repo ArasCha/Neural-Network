@@ -80,7 +80,7 @@ class Perceptron:
         return A >= 0.5 # should depend on the activation function used
     
     @property
-    def performance(self) -> float:
+    def accuracy(self) -> float:
         from sklearn.metrics import accuracy_score
         Y_pred = self.predict(self.X)
         return accuracy_score(self.Y, Y_pred)
