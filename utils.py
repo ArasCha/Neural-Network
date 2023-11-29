@@ -3,6 +3,21 @@ import matplotlib.pyplot as plt
 import h5py
 
 
+def analysis(errors, errors_test, accuracies, accuracies_test):
+	plt.figure(figsize=(12, 4))
+	
+	plt.subplot(1, 2, 1)
+	plt.plot(errors, label="Train Loss")
+	plt.plot(errors_test, label="Test Loss")
+	plt.legend()
+
+	plt.subplot(1, 2, 2)
+	plt.plot(accuracies, label="Train Accuracy")
+	plt.plot(accuracies_test, label="Test Accuracy")
+	plt.legend()
+	
+	plt.show()
+
 def display_dataset(X: list, Y: list):
     plt.scatter(X[:,0], X[:,1], c=Y)
 

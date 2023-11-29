@@ -15,16 +15,16 @@ if __name__ == "__main__":
     """
 
     X = normalize_images(X_images)
+    X_test_normalized = normalize_images(X_test)
 
     perceptron = Perceptron(X, Y, sigmoid, LogLoss)
-    perceptron.train(100, 2)
+    errors, accuracies, errors_test, accuracies_test = perceptron.train(500, 0.01, X_test_normalized, y_test)
     
-    print(perceptron.performance)
+    print(perceptron.accuracy())
 
-    image, value = X_test[2], y_test[2]
-    show_images(image, value) # show the image we chose
-    image_n = normalize_images(image)
-    print(perceptron.predict(image_n)) # False: cat, True: dog
+    # image, value = X_test[6], y_test[6]
+    # # show_images(image, value) # show the image we chose
+    # image_n = normalize_images(image)
+    # print(perceptron.predict(image_n)) # False: cat, True: dog
     
-    # print(perceptron.errors) # nan problem
-    # display_error_graph(perceptron.errors)
+    analysis(errors, errors_test, accuracies, accuracies_test)
