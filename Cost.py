@@ -7,7 +7,6 @@ class CostFunction:
         A: Vector of elements that went through the activation function
         Y: Vector of the attribute we want to predict
         """
-        assert A.shape == Y.shape, "A and Y matrixes must have the same size"
         self.A = A
         self.Y = Y
     
