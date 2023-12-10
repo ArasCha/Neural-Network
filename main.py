@@ -2,6 +2,7 @@ from Perceptron import Perceptron
 from Cost import LogLoss
 from ActivationFunction import sigmoid
 from utils import *
+from NeuralNetwork import NeuralNetwork
 
 
 
@@ -17,8 +18,19 @@ if __name__ == "__main__":
     X = normalize_images(X_images)
     X_test_normalized = normalize_images(X_test)
 
-    perceptron = Perceptron(X, Y, sigmoid, LogLoss)
-    errors, accuracies, errors_test, accuracies_test = perceptron.train(10000, 0.01, X_test_normalized, y_test)
+    # perceptron = Perceptron(X, Y, sigmoid, LogLoss)
+    # errors, accuracies, errors_test, accuracies_test = perceptron.train(10000, 0.01, X_test_normalized, y_test)
+
+
+    X = X.T
+    Y = Y.reshape((1, Y.shape[0]))
+
+    nn = NeuralNetwork(X, Y, [8, 16, 32], sigmoid)
+
+    X_test_normalized = X_test_normalized.T
+    y_test = y_test.reshape((1, y_test.shape[0]))
+
+    errors, accuracies, errors_test, accuracies_test = nn.train(100, 0.1, X_test_normalized, y_test)
     
     # image, value = X_test[6], y_test[6]
     # # show_images(image, value) # show the image we chose
