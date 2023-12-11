@@ -18,11 +18,6 @@ if __name__ == "__main__":
     X_test_normalized = normalize_images(X_test)
 
     perceptron = Perceptron(X, Y, sigmoid, LogLoss)
-    errors, accuracies, errors_test, accuracies_test = perceptron.train(10000, 0.01, X_test_normalized, y_test)
-    
-    # image, value = X_test[6], y_test[6]
-    # # show_images(image, value) # show the image we chose
-    # image_n = normalize_images(image)
-    # print(perceptron.predict(image_n)) # False: cat, True: dog
+    errors, accuracies, errors_test, accuracies_test = perceptron.train(100, 0.01, X_test_normalized, y_test)
     
     analysis(errors, errors_test, accuracies, accuracies_test)
