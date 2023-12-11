@@ -7,7 +7,6 @@ class CostFunction:
         A: Vector of elements that went through the activation function
         Y: Vector of the attribute we want to predict
         """
-        assert A.shape == Y.shape, "A and Y matrixes must have the same size"
         self.A = A
         self.Y = Y
     
@@ -20,7 +19,6 @@ class CostFunction:
         """
         Returns ∂L/∂W
         """
-        assert self.A.shape[0] == X.shape[0], "A and Z must have the same number of lines"
     
     def derivative_bias(self) -> float:
         """
@@ -36,7 +34,6 @@ class LogLoss(CostFunction):
         return -(1/len(self.Y)) * np.sum( self.Y * np.log(self.A + ε) + (1 - self.Y) * np.log(1 - self.A + ε) )
 
     def derivative_weights(self, X) -> np.ndarray:
-        super().derivative_weights(X)
         return (1/len(self.A)) * (X.T).dot(self.A - self.Y)
 
     def derivative_bias(self) -> float:
