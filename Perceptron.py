@@ -1,5 +1,7 @@
 import numpy as np
 from Cost import CostFunction
+from sklearn.metrics import accuracy_score
+
 
 
 class Perceptron:
@@ -23,13 +25,13 @@ class Perceptron:
         errors_test = []
         accuracies_test = []
         
-        for i in range(epochs):
+        for _ in range(epochs):
             
             A = self.model(self.X)
 
             L = self.cost_function(A, self.Y)
             errors.append(L.value())
-            accuracies.append(self.accuracy())
+            accuracies.append(self.accuracy(self.X, self.Y))
             
             if X_test is not None and Y_test is not None:
                 L_test = self.cost_function(self.model(X_test), Y_test)
@@ -41,9 +43,9 @@ class Perceptron:
         return errors, accuracies, errors_test, accuracies_test
 
     def init_weights(self) -> tuple[np.ndarray, float]:
+        
         W = np.random.randn(self.X.shape[1], 1)
         b = np.random.randn(1)
-        W = W.reshape(len(W), 1)
         return W, b
 
     def calculate_Z(self, X: np.ndarray) -> np.ndarray:
@@ -52,9 +54,8 @@ class Perceptron:
         """
 
         assert X.shape[1] == self.W.shape[0], "Given number of features must be equal to number of weights"
-        arr = X.dot(self.W) + self.b
-        arr = arr.reshape(len(arr), 1)
-        return arr
+        Z = X.dot(self.W) + self.b
+        return Z
     
     def model(self, X: np.ndarray) -> np.ndarray:
         """
@@ -63,9 +64,8 @@ class Perceptron:
         """
 
         Z = self.calculate_Z(X)
-        arr = np.array(list(map(self.activation_function, Z)))
-        arr = arr.reshape((len(arr), 1))
-        return arr
+        A = np.array(list(map(self.activation_function, Z)))
+        return A
 
     def calculate_new_weights(self, η: float, C: CostFunction) -> tuple[np.ndarray, float]:
         """
@@ -91,16 +91,10 @@ class Perceptron:
         A = self.model(X)
         return A >= 0.5 # should depend on the activation function used
     
-    def accuracy(self, X: np.ndarray = None, Y: np.ndarray = None) -> float:
+    def accuracy(self, X: np.ndarray, Y: np.ndarray):
         """
         Returns the accuracy of the model
         """
 
-        from sklearn.metrics import accuracy_score
-
-        if X is not None:
-            Y_pred = self.predict(X) # if we want to test the accuracy
-            return accuracy_score(Y, Y_pred)
-        else:
-            Y_pred = self.predict(self.X)
-            return accuracy_score(self.Y, Y_pred)
+        Y_pred = self.predict(X)
+        return accuracy_score(Y, Y_pred)
