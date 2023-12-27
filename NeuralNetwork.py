@@ -46,8 +46,8 @@ class NeuralNetwork():
 		structure: Structure of the neural network. @example: [2, 4] # Layer 1: 2 neurons | Layer 2: 4 neurons
 		"""
 
-		self.X = X
-		self.Y = Y
+		self.X = adapt(X)
+		self.Y = adapt(Y)
 		self.layers = self.init_layers(hidden_layers)
 		self.activation_function = activation_function
 
@@ -71,6 +71,8 @@ class NeuralNetwork():
 		accuracies = []
 		errors_test = []
 		accuracies_test = []
+		X_test = adapt(X_test)
+		Y_test = adapt(Y_test)
 
 		for _ in range(epochs):
 			
@@ -119,8 +121,10 @@ class NeuralNetwork():
 			dZ = self.layers[i].W.T.dot(dZ) * prev_A * ( 1 - prev_A )
 
 
-	def predict(self, X):
+	def predict(self, X, val = None):
 		activation = self.forward(X, test=True)
+		if val == "numbers":
+			return activation.flatten()
 		return activation >= 0.5 # this value depends on the activation function
 
 
@@ -131,3 +135,9 @@ class NeuralNetwork():
 		
 		Y_pred = self.predict(X)
 		return accuracy_score(Y.flatten(), Y_pred.flatten())
+
+
+def adapt(X: np.ndarray):
+	if X.ndim == 1:
+		return X.reshape((1, X.shape[0]))
+	return X.T
